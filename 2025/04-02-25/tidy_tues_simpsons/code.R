@@ -38,7 +38,7 @@ simpsons_tidy <- simpsons %>%
   unnest_tokens(word, line) %>%
   anti_join(stop_words) %>%
   count(word, sort = TRUE) %>%
-  slice_max(n = 10, order_by = n)
+  slice_max(n = 5, order_by = n)
 
 # first plot #
 p <- ggplot(simpsons_tidy, aes(reorder_within(word, n, character),
@@ -59,12 +59,13 @@ colors <- c("dad" = "#2f64d6",
             "kids" = "#CE6E61")
 
 p + scale_fill_manual(values = colors) +
-  labs(x = "Word", y = "Frequency",
+  labs(x = NULL, y = "Frequency",
        title = "The Simpsons",
        subtitle = "Most spoken words by character") +
   theme(plot.background = element_rect(fill = "#CBD8F5"),
         panel.background = element_rect(fill = "#CBD8F5"),
-        strip.background = element_rect(fill = "white"),
+        strip.background.x = element_rect(fill = "white"),
         legend.position = "none",
         panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())
+        panel.grid.minor = element_blank(),
+        axis.ticks = element_blank())
