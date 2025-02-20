@@ -6,7 +6,6 @@ library(ggplot2)
 library(paletteer)
 library(sysfonts)
 library(showtext)
-library(ggiraph)
 
 # load data #
 
@@ -64,8 +63,8 @@ treemap <- ggplot(treemap_df, aes(area = n, fill = n, subgroup = n)) +
                                colour = "#ded9cc", size = 1.5) +
   geom_treemap_subgroup_text(start = "topleft", layout = "srow",
                              place = "bottomright",
-                             alpha = 0.5, colour = "#f8f5ec",
-                             fontface = "italic", size = 8) +
+                             alpha = 0.6, colour = "#f8f5ec",
+                             fontface = "italic", size = 12) +
   scale_fill_paletteer_c("ggthemes::Sunset-Sunrise Diverging") +
   labs(title = title_text,
        subtitle = subtitle_text,
