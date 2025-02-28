@@ -39,17 +39,19 @@ models <- model_dat %>%
            lower < 1 & upper > 1 ~ "Not Significant", # odds ratio of 1 indicates both groups odds are equal
            TRUE ~ "Significant"
          ))) %>%
-  filter(!(race %in% c("Other/Mixed", "White"))) %>%
+  filter(race !="White") %>%
   mutate(id = factor(row_number()),
          id = fct_reorder(id, point)) %>%
-  select(doi, outcome, measure, ref, point, lower, upper, race, study_type, significance, id)
+  select(doi, outcome, measure, ref, point, lower, upper, race, study_type, Significance, id)
 
 n_studies <- n_distinct(models$doi)
+n_outcomes <- n_distinct(models$outcome)
+n_results <- n_distinct(models$id)
 
 #---------------create the summary table---------------#
 summary <- models %>%
   group_by(race) %>%
-  count(race, sort = TRUE)
+  summarise(n = n_distinct(id))
 
 #---------------font, text, and colors---------------#
 font_add_google("Nunito", "nunito")
@@ -57,26 +59,26 @@ font <- "nunito"
 showtext_auto()
 
 title <- "Racial Disparities in Reproductive Medicine Research: White vs. Non-White Outcomes"
-subtitle <- glue::glue("Shows the point estimate (odds ratio, risk ratio, or hazard ratio) and confidence intervals for 271 reproductive health
-outcomes relating to death and morbidity, measured across {n_studies} studies published in reproductive health journals
-between 2010 and 2023.\n\nEstimates greater than 1 indicate a higher risk or odds for the comparison group.")
+subtitle <- glue::glue("Shows {n_results} estimates and confidence intervals of odds ratios, risk ratios, and hazard ratios for {n_outcomes} reproductive health outcomes 
+relating to mortality and morbidity, measured across {n_studies} studies published in reproductive health journals between 2010 and 2023. 
+Estimates greater than 1 indicate a higher risk/odds for the comparison (non-white) groups.")
 caption <- "Created by: jessimoore@bsky.social   Source: 10.1016/j.ajog.2024.07.024"
 
 colors <- c("#8ecae6", "#023047")
-summary_colors <- c("#219ebc","#219ebc","#219ebc","#219ebc")
+summary_colors <- c("#219ebc","#219ebc","#219ebc","#219ebc","#219ebc")
 
 
 #---------------caterpillar plot---------------#
 main_plot <- ggplot(models, aes(x = id, y = point, 
-                        color = significance)) +
+                        color = Significance)) +
   geom_point(size = 1) +
   geom_segment(aes(y = lower, yend = upper)) +
   geom_hline(yintercept = 1, linetype = "dashed") +
-  annotate(geom = "text", x = 282, y = 0.4, 
-           label = "Outcomes Measured per Comparison Group",
+  annotate(geom = "text", x = 320, y = 0.42, 
+           label = "Results Published per Comparison Group",
            family = font) +
   scale_color_manual(values = colors) +
-  scale_y_log10(breaks = c(0.3, 0.5, 1, 1.7, 3, 6)) +
+  scale_y_log10(breaks = c(0, 0.5, 1, 1.5, 2.5, 4, 6)) +
   labs(x = NULL, y = "Point Estimate\n(log scale)",
        title = title, subtitle = subtitle, caption = caption,
        color = "Statistical Significance") +
@@ -93,7 +95,6 @@ main_plot <- ggplot(models, aes(x = id, y = point,
         axis.title.y = element_text(),
         panel.grid.major.x = element_blank(),
         plot.margin = margin(30,30,30,30))
-main_plot
 
 #---------------summary plot---------------#
 summary_plot <- ggplot(summary, 
@@ -111,7 +112,6 @@ summary_plot <- ggplot(summary,
         axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5),
         panel.background = element_blank())
-summary_plot
 
 #---------------combined plot---------------#
 viz <- main_plot + inset_element(summary_plot,
