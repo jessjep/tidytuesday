@@ -73,7 +73,7 @@ st <- "According to the average of Rotten Tomatoes,
 Metacritic, and Critics Choice ratings."
 cpt <- "Created by: jessimoore@bsky.social   Source: {pixar}"
 
-bg = "#86C1E3"
+bg = "#80B8D9"
 txt = "grey18"
 pal <- "grDevices::Purple-Orange"
 
@@ -108,8 +108,8 @@ p2 <- ggplot(pixar) +
                                     hjust = 1, vjust = 0.5),
         axis.text = element_text(family = font2, size = 10, color = txt),
         legend.text = element_text(family = font2, size = 10, color = txt),
-        legend.title = element_text(family = font2, size = 12, color = txt),
-        plot.margin = margin(35,35,35,35),
+        legend.title = element_text(family = font2, size = 11, color = txt),
+        plot.margin = margin(35,20,35,20),
         plot.caption = element_text(family = font2, size = 9, 
                                     hjust = 0.45, vjust = -6),
         plot.caption.position = "plot")
