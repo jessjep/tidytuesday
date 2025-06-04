@@ -18,23 +18,23 @@ monsters2 <- monsters %>%
                            "Gargantuan" ~ 10)) %>%
   filter(alignment != "Unaligned")
 
-palette <- palette <- c(
+palette <- c(
   "Aberration"           = "#7A4DA1",
-  "Celestial"            = "#D6D4A7",
+  "Celestial"            = "#F1F1C0",
   "Construct"            = "#2C2A8C",
   "Dragon"               = "#FF6E27",
-  "Elemental"            = "#3671A3",
-  "Fey"                  = "#935BA1",
-  "Fiend"                = "#9E3A2A",
+  "Elemental"            = "#53A6D8",
+  "Fey"                  = "#C88BCE",
+  "Fiend"                = "#D35445",
   "Giant"                = "#BC5A89",
   "Humanoid"             = "#45B1C6",
-  "Monstrosity"          = "#D8A31E",
-  "Plant"                = "#2E5E4E",
-  "Swarm of Tiny Undead" = "#1E8A84",
-  "Undead"               = "#57A773"
+  "Monstrosity"          = "#E0B329",
+  "Plant"                = "#4C8B7D",
+  "Swarm of Tiny Undead" = "#30BEB1",
+  "Undead"               = "#89D1A1"
 )
 
-background <- "#262e33"
+background <- "#1E1E1E"
 title <- "Monsters of Dungeons & Dragons"
 caption <- "Created by @jessimoore.bsky.social, Source: DnD System Reference Document v5.2.1"
 
@@ -52,7 +52,8 @@ p <- ggplot(monsters2, aes(str, int, tooltip = name)) +
   scale_size_identity(guide = "legend",
                       breaks = c(1, 3, 4.5, 7, 10),
                       labels = c("Tiny", "Small or Medium", "Large", "Huge", "Gargantuan")) +
-  guides(color = guide_legend(override.aes = list(size = 4))) +
+  guides(color = guide_legend(override.aes = list(size = 4)),
+         size = guide_legend(override.aes = list(color = "#EDEDED", alpha = 1))) +
   facet_wrap_interactive(
     ~factor(alignment, levels = c(
       "Lawful Good", "Neutral Good", "Chaotic Good",
@@ -64,17 +65,19 @@ p <- ggplot(monsters2, aes(str, int, tooltip = name)) +
   theme(plot.background = element_rect(fill = background),
         panel.background = element_rect(fill = background),
         legend.background = element_rect(fill = background),
-        text = element_text(family = font2, colour = "#919aa1", size = 16),
-        plot.title = element_text(size = 50, family = font, face = "bold",
+        text = element_text(family = font2, colour = "#EDEDED", size = 16),
+        plot.title = element_text(size = 58, family = font, face = "bold",
                                   hjust = 0.5, margin = margin(0,0,25,0)),
         plot.title.position = "plot",
-        plot.caption = element_text(size = 10, hjust = 0.5, margin = margin(40,0,0,0)),
+        plot.caption = element_text(size = 12, hjust = 0.5, margin = margin(40,0,0,0)),
         plot.caption.position = "plot",
-        axis.title = element_text(size = 30, family = font, face = "bold"),
-        legend.title = element_text(size = 28, family = font, face = "bold"),
+        axis.title = element_text(size = 36, family = font, face = "bold"),
+        legend.title = element_text(size = 32, family = font, face = "bold"),
+        legend.text = element_text(size = 18, family = font2),
+        axis.text = element_text(size = 14, color = "#EDEDED"),
         panel.grid = element_line(colour = "#454e54", linetype = "dashed"),
-        strip.background = element_rect(fill = "#454e54"),
-        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "#444444"),
+        strip.text = element_text(face = "bold", color = "#EDEDED", size = 16),
         plot.margin = margin(30,30,10,30))
 p
 
@@ -95,5 +98,5 @@ gdtools::register_gfont("Tangerine")
 gdtools::register_gfont("EB Garamond")
 interactive_plot <- girafe(ggobj = p, width_svg = 10, height_svg = 10)
 int_plot <- girafe_options(interactive_plot, opts_hover(css = hover_css),
-                         opts_tooltip(css = tooltip_css, use_fill = TRUE))
+                           opts_tooltip(css = tooltip_css, use_fill = TRUE))
 int_plot
