@@ -78,7 +78,7 @@ p <- ggplot(monsters2, aes(str, int, tooltip = name)) +
         panel.grid = element_line(colour = "#454e54", linetype = "dashed"),
         strip.background = element_rect(fill = "#444444"),
         strip.text = element_text(face = "bold", color = "#EDEDED", size = 16),
-        plot.margin = margin(30,30,10,30))
+        plot.margin = margin(30,30,30,30))
 p
 
 # hover and tooltip aesthetics
